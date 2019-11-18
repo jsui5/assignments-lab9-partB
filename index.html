@@ -1,0 +1,97 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <p>How many buttons to create?</p>
+    <input type="text" id="textId"> <br>
+    <input type="button" id="buttonId" value="Go!"> <br>
+    <p id="result"></p>
+
+    <script>
+        let arrayButtons = [];
+        let btnHeight = 60;
+        let btnWidth = 120;
+        let clickCount = 0;
+
+        function button(color, width, height, order) {
+            this.btn = document.createElement("button");
+            this.btn.style.backgroundColor = color;
+            this.btn.style.width = width;
+            this.btn.style.height = height;
+            this.order = order;
+            document.body.appendChild(this.btn);
+            this.spawnLocation = function (left, top) {
+                this.btn.style.position = "absolute";
+                this.btn.style.left = left;
+                this.btn.style.top = top;
+            }
+        }
+
+        function checkAnswer() {
+            for (i = 0; i < arrayButtons.length; i++) {
+                let btnOrder = arrayButtons[i].order;
+                if (btnOrder === clickCount) {
+                    document.getElementById("result").innerHTML = "Excellent memory!"
+                } else {
+                    document.getElementById("result").innerHTML = "Wrong order!"
+                }
+            }
+        }
+
+        function clickBtn() {
+            for (i = 0; i < arrayButtons.length; i++) {
+                arrayButtons[i].btn.onclick = checkAnswer;
+            }
+        }
+
+        function onClickHandler() {
+            let numOfBtn = document.getElementById("textId").value
+            for (n = 0; n < numOfBtn; n++) {
+                let windowWidth = window.innerWidth
+                    || document.documentElement.clientWidth
+                    || document.body.clientWidth;
+                let windowHeight = window.innerHeight
+                    || document.documentElement.clientHeight
+                    || document.body.clientHeight;
+                let btnColor = "rgb(" + Math.random() * 255 + "," + Math.random() * 255 + "," + Math.random() * 255 + ")";
+                let btn = new button(btnColor, btnWidth + "px", btnHeight + "px", n)
+                arrayButtons.push(btn)
+                clickBtn()
+            }
+        }
+
+
+        function newLocation() {
+            for (i = 0; i < arrayButtons.length; i++) {
+                let windowWidth = window.innerWidth
+                    || document.documentElement.clientWidth
+                    || document.body.clientWidth;
+                let windowHeight = window.innerHeight
+                    || document.documentElement.clientHeight
+                    || document.body.clientHeight;
+                arrayButtons[i].btn.style.position = "absolute";
+                arrayButtons[i].btn.style.left = Math.floor(Math.random() * (windowWidth - btnWidth)) + "px";
+                arrayButtons[i].btn.style.top = Math.floor(Math.random() * (windowHeight - btnHeight)) + "px";
+            };
+        };
+
+        function move() {
+            document.getElementById("buttonId").onclick = onClickHandler
+            setTimeout(
+                newLocation, 5000
+            )
+        };
+
+        move()
+
+
+    </script>
+</body>
+
+</html>
