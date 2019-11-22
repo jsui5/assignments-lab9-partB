@@ -25,6 +25,17 @@
             this.btn.style.width = width;
             this.btn.style.height = height;
             this.order = order;
+            this.btn.onclick = function () {
+                let newButton = arrayButtons[clickCount];
+                if (newButton.order != order) {
+                    document.getElementById("result").innerHTML = "Wrong order!"
+                } else if (clickCount === arrayButtons.length - 1) {
+                    document.getElementById("result").innerHTML = "Excellent memory!"
+                } else {
+                    newButton.btn.style.display = "none"
+                    clickCount++
+                }
+            }
             document.body.appendChild(this.btn);
             this.spawnLocation = function (left, top) {
                 this.btn.style.position = "absolute";
@@ -32,40 +43,6 @@
                 this.btn.style.top = top;
             }
         }
-
-        function checkAnswer() {
-            for (i = 0; i < arrayButtons.length; i++) {
-                let btnOrder = arrayButtons[i].order;
-                if (btnOrder === clickCount) {
-                    document.getElementById("result").innerHTML = "Excellent memory!"
-                } else {
-                    document.getElementById("result").innerHTML = "Wrong order!"
-                }
-            }
-        }
-
-        function clickBtn() {
-            for (i = 0; i < arrayButtons.length; i++) {
-                arrayButtons[i].btn.onclick = checkAnswer;
-            }
-        }
-
-        function onClickHandler() {
-            let numOfBtn = document.getElementById("textId").value
-            for (n = 0; n < numOfBtn; n++) {
-                let windowWidth = window.innerWidth
-                    || document.documentElement.clientWidth
-                    || document.body.clientWidth;
-                let windowHeight = window.innerHeight
-                    || document.documentElement.clientHeight
-                    || document.body.clientHeight;
-                let btnColor = "rgb(" + Math.random() * 255 + "," + Math.random() * 255 + "," + Math.random() * 255 + ")";
-                let btn = new button(btnColor, btnWidth + "px", btnHeight + "px", n)
-                arrayButtons.push(btn)
-                clickBtn()
-            }
-        }
-
 
         function newLocation() {
             for (i = 0; i < arrayButtons.length; i++) {
@@ -82,14 +59,33 @@
         };
 
         function move() {
-            document.getElementById("buttonId").onclick = onClickHandler
+            document.getElementById("buttonId").onclick = gameLogic
             setTimeout(
                 newLocation, 5000
             )
         };
 
-        move()
+        function gameLogic() {
+            let numOfBtn = document.getElementById("textId").value
+            if (numOfBtn >= 5 && numOfBtn <= 100) {
+                for (n = 0; n < numOfBtn; n++) {
+                    let windowWidth = window.innerWidth
+                        || document.documentElement.clientWidth
+                        || document.body.clientWidth;
+                    let windowHeight = window.innerHeight
+                        || document.documentElement.clientHeight
+                        || document.body.clientHeight;
+                    let btnColor = "rgb(" + Math.random() * 255 + "," + Math.random() * 255 + "," + Math.random() * 255 + ")";
+                    let btn = new button(btnColor, btnWidth + "px", btnHeight + "px", n)
+                    arrayButtons.push(btn)
+                    console.log(arrayButtons)
+                }
+            } else {
+                document.getElementById("result").innerHTML = "Please enter a number between 5 and 100."
+            }
+        }
 
+        move()
 
     </script>
 </body>
